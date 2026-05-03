@@ -3,15 +3,11 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
+import Body from "./components/Body";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      Staring project
-      <h2 className="text-[48px] font-bold text-red-600">Title</h2>
-    </>
+    <Body/>
   );
 }
 
