@@ -20,6 +20,9 @@ If you are developing a production application, we recommend using TypeScript wi
 
 - create vite app
 - config tailwind
+- Header
+- Login form
+- Signup form
 
 Features
 
