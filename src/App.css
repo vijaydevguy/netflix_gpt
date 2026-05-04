@@ -2,6 +2,6 @@
 
 @layer components {
   .inputField {
-    @apply p-2 my-2 w-full bg-white/10 focus:bg-white/15 rounded-md border border-white/20;
+    @apply p-2 my-4 w-full bg-white/10 focus:bg-white/15 rounded-md border border-white/20;
   }
 }
