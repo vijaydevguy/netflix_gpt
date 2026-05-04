@@ -1,8 +1,11 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
+  const { signup, err, loading, user } = useAuth();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
@@ -15,9 +18,31 @@ const Login = () => {
   const password = useRef(null);
 
   const handleButtonClick = () => {
-    const message = checkValidData(email.current.value, password.current.value);
+    const userName = email.current.value;
+    const mail = email.current.value;
+    const pass = password.current.value;
+
+    const message = checkValidData(mail, pass);
     // console.log(message,email.current.value,password.current.value)
     setErrMsg(message);
+    console.log(isSignUp);
+
+    if (message) return;
+
+    if (isSignUp) {
+      const payload = {
+        name: userName,
+        mail: mail,
+        pass: pass,
+      };
+
+      console.log(payload, "submitSignup");
+      //signup
+      signup(mail, pass);
+      console.log(user, "testResUser");
+    } else {
+      //signin
+    }
   };
 
   return (
@@ -63,14 +88,20 @@ const Login = () => {
           className="inputField"
         />
         <div className="relative h-4 bottom-2">
-          <p className="text-red-500 absolute font-medium">{errMsg}</p>
+          {!loading && (err || errMsg) && (
+            <p className="text-red-500 absolute font-medium">{err || errMsg}</p>
+          )}
         </div>
 
         <button
-          className="p-4 mt-4 bg-red-600  cursor-pointer w-full rounded-md "
+          type="submit"
+          className={`p-4 mt-4 ${loading ? "bg-red-500 cursor-not-allowed" : "bg-red-600 cursor-pointer"}    w-full rounded-md `}
           onClick={handleButtonClick}
+          disabled={loading}
         >
-          {isSignUp ? "Sign Up" : "Sign in"}
+          {!loading && (isSignUp ? "Sign Up" : "Sign In")}
+
+          {loading && "Loading..."}
         </button>
         <p className="py-4 ">
           {isSignUp ? "Already Registered" : "New to Netflix?"}{" "}
