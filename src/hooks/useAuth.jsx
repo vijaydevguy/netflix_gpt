@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { signUpUser } from "../services/authService";
+import { signUpUser, signInUser } from "../services/authService";
+import { toast } from "react-toastify";
 
 export const useAuth = () => {
   const [user, setUser] = useState(null);
@@ -10,9 +11,12 @@ export const useAuth = () => {
   const signup = async (email, password) => {
     try {
       setLoading(true);
+      setErr(null);
       const userDetail = await signUpUser(email, password);
       setUser(userDetail);
       setErr(null);
+      toast.success("Signed up successfully");
+      return userDetail;
     } catch (error) {
       const errorCode = error.code;
       if (errorCode === "auth/email-already-in-use") {
@@ -22,10 +26,34 @@ export const useAuth = () => {
       } else {
         setErr(error.message);
       }
+      return null;
     } finally {
       setLoading(false);
     }
   };
 
-  return { signup, user, loading, err };
+  const signin = async (email, password) => {
+    try {
+      setLoading(true);
+      setErr(null);
+      const userDetail = await signInUser(email, password);
+      setUser(userDetail);
+      setErr(null);
+      toast.success("Signed in successfully");
+      return userDetail;
+    } catch (error) {
+      if (error.code == "auth/invalid-credential") {
+        setErr("User not found or invalid credentials");
+      } else {
+        setErr(error.message);
+      }
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearError = () => setErr(null);
+
+  return { signup, signin, user, loading, err, clearError };
 };

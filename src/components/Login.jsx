@@ -4,25 +4,31 @@ import { checkValidData } from "../utils/validate";
 import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
-  const { signup, err, loading, user } = useAuth();
+  const { signup, signin, err, loading, user, clearError } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   const handleSignin = () => {
     setIsSignUp(!isSignUp);
+    setErrMsg(null);
+    clearError();
   };
 
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
 
-  const handleButtonClick = () => {
-    const userName = email.current.value;
-    const mail = email.current.value;
-    const pass = password.current.value;
+  const clearField = () => {
+    if (isSignUp) {
+      name.current.value = "";
+    }
+    email.current.value = "";
+    password.current.value = "";
+  };
 
-    const message = checkValidData(mail, pass);
+  const handleButtonClick = async () => {
+    const message = checkValidData(email.current.value, password.current.value);
     // console.log(message,email.current.value,password.current.value)
     setErrMsg(message);
     console.log(isSignUp);
@@ -31,17 +37,30 @@ const Login = () => {
 
     if (isSignUp) {
       const payload = {
-        name: userName,
-        mail: mail,
-        pass: pass,
+        name: name.current.value,
+        mail: email.current.value,
+        pass: password.current.value,
       };
 
       console.log(payload, "submitSignup");
       //signup
-      signup(mail, pass);
-      console.log(user, "testResUser");
+      const signedUpUser = await signup(email.current.value, password.current.value);
+      console.log(signedUpUser, "testResSignupUser");
+      if (signedUpUser) {
+        clearField();
+      }
     } else {
+      const payload = {
+        mail: email.current.value,
+        pass: password.current.value,
+      };
+      console.log(payload, "submitSignin");
       //signin
+      const signedInUser = await signin(email.current.value, password.current.value);
+      console.log(signedInUser, "testResSigninUser");
+      if (signedInUser) {
+        clearField();
+      }
     }
   };
 
@@ -71,6 +90,10 @@ const Login = () => {
             type="text"
             placeholder="Full Name"
             className="inputField"
+            onFocus={() => {
+              setErrMsg(null);
+              clearError();
+            }}
           />
         )}
         <input
@@ -79,6 +102,10 @@ const Login = () => {
           type="text"
           placeholder="Email Address"
           className="inputField"
+          onFocus={() => {
+            setErrMsg(null);
+            clearError();
+          }}
         />
         <input
           ref={password}
@@ -86,6 +113,10 @@ const Login = () => {
           type="password"
           placeholder="Password"
           className="inputField"
+          onFocus={() => {
+            setErrMsg(null);
+            clearError();
+          }}
         />
         <div className="relative h-4 bottom-2">
           {!loading && (err || errMsg) && (
