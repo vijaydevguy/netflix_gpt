@@ -5,6 +5,8 @@ import heroImg from "./assets/hero.png";
 import "./App.css";
 import Body from "./components/Body";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import { Provider } from "react-redux";
+import appStore from "./utils/appStore";
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
         theme="light"
         transition={Bounce}
       />
-      <Body />
+      <Provider store={appStore}>
+        <Body />
+      </Provider>
     </>
   );
 }

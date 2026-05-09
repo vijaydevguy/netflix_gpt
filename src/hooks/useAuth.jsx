@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signUpUser, signInUser } from "../services/authService";
+import { signUpUser, signInUser, logoutUser } from "../services/authService";
 import { toast } from "react-toastify";
 
 export const useAuth = () => {
@@ -53,7 +53,16 @@ export const useAuth = () => {
     }
   };
 
+  const logout = async () => {
+    try {
+      await logoutUser();
+      toast.error("Logout successfully");
+    } catch (error) {
+      setErr(error.message);
+    }
+  };
+
   const clearError = () => setErr(null);
 
-  return { signup, signin, user, loading, err, clearError };
+  return { signup, signin, logout, user, loading, err, clearError };
 };

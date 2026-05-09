@@ -2,8 +2,10 @@ import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const { signup, signin, err, loading, user, clearError } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
@@ -44,9 +46,13 @@ const Login = () => {
 
       console.log(payload, "submitSignup");
       //signup
-      const signedUpUser = await signup(email.current.value, password.current.value);
+      const signedUpUser = await signup(
+        email.current.value,
+        password.current.value,
+      );
       console.log(signedUpUser, "testResSignupUser");
       if (signedUpUser) {
+        navigate("/browse");
         clearField();
       }
     } else {
@@ -56,9 +62,13 @@ const Login = () => {
       };
       console.log(payload, "submitSignin");
       //signin
-      const signedInUser = await signin(email.current.value, password.current.value);
+      const signedInUser = await signin(
+        email.current.value,
+        password.current.value,
+      );
       console.log(signedInUser, "testResSigninUser");
       if (signedInUser) {
+        navigate("/browse");
         clearField();
       }
     }

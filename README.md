@@ -27,7 +27,12 @@ If you are developing a production application, we recommend using TypeScript wi
 - Form validation
 - UseRef Hook
 - Firebase Setup
-- Sign Up
+- Sign Up (acc creation)
+- Sign In (login user)
+- React toastify (for toaster message)
+- Created Redux Store with userSlice
+- Sign out
+
 
 Features
 

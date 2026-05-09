@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
@@ -27,10 +28,20 @@ export const signInUser = async (email, password) => {
       password,
     );
     const user = userCredential.user;
-    console.log(userCredential,"apiUserDetail")
+    console.log(userCredential, "apiUserDetail");
     return user;
   } catch (error) {
     console.log(`signin failed ${error.message}`);
+    throw error;
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+    return "Sign out successfully";
+  } catch (error) {
+    console.log(error, "failed to signout");
     throw error;
   }
 };
