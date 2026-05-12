@@ -26,13 +26,14 @@ const Body = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // const uid = user.uid;
-        const { uid, displayName, email, password } = user;
+        const { uid, displayName, photoURL, email, password } = user;
         dispatch(
           addUser({
             uid: uid,
             name: displayName,
             email: email,
             password: password,
+            photoUrl: photoURL,
           }),
         );
       } else {

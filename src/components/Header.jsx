@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { TbLogout2 } from "react-icons/tb";
 import { useAuth } from "../hooks/useAuth";
 import LogoutConfirmModal from "./LogoutModal";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  // we able to get stored state using selector in redux
+  const user = useSelector((store) => store.user);
+
   const [selectedOption, setSelectedOption] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +33,7 @@ const Header = () => {
   const valueTemplate = (option, props) => {
     return (
       <img
-        src={assets.profile_png}
+        src={user?.photoUrl ? user?.photoUrl : assets.profile_png}
         alt="profile"
         className="w-8 h-8 rounded-full cursor-pointer"
       />
@@ -54,28 +58,39 @@ const Header = () => {
 
   const handleChange = (e) => {
     setSelectedOption(e.value);
+    console.log(e.value);
 
-    switch (e.value) {
-      // case "profile":
-      //   navigate("/profile");
-      //   break;
-      // case "settings":
-      //   navigate("/settings");
-      //   break;
-      case "logout":
-        setShowLogoutModal(true);
-
-        // logout();
-        // navigate("/");
-        // console.log("Logging out...");
-        break;
-      default:
-        break;
+    if (e.value == "logout") {
+      console.log("click logout");
+      setShowLogoutModal(!showLogoutModal);
     }
+    //due to prime package before it is not clearing state
+    setSelectedOption(null);
+
+    // switch (e.value) {
+    // case "profile":
+    //   navigate("/profile");
+    //   break;
+    // case "settings":
+    //   navigate("/settings");
+    //   break;
+    // case "logout":
+    // setShowLogoutModal(true);
+    // console.log(showLogoutModal, "Testing");
+
+    // logout();
+    // navigate("/");
+    // console.log("Logging out...");
+    // break;
+    // default:
+    // break;
+    // }
   };
 
   return (
-    <div className="absolute px-8 py-6 bg-gradient-to-b from-black to-transparent w-full z-50 flex flex-row justify-between items-center">
+    <div
+      className={`absolute px-8 py-6 bg-gradient-to-b from-black to-transparent w-full z-50 flex flex-row justify-between items-center `}
+    >
       {/* logout modal */}
       <LogoutConfirmModal
         visible={showLogoutModal}
@@ -91,7 +106,9 @@ const Header = () => {
         />
       </a>
 
-      <div>
+      <div
+        className={`${user ? "opacity-100" : "opacity-0"} transition-all ease-in-out duration-300`}
+      >
         <Dropdown
           value={selectedOption}
           onChange={handleChange}

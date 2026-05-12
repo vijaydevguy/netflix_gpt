@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { signUpUser, signInUser, logoutUser } from "../services/authService";
+import {
+  signUpUser,
+  signInUser,
+  logoutUser,
+  updateUserProfile,
+} from "../services/authService";
 import { toast } from "react-toastify";
 
 export const useAuth = () => {
@@ -8,11 +13,12 @@ export const useAuth = () => {
 
   const [err, setErr] = useState(null);
 
-  const signup = async (email, password) => {
+  const signup = async (name, email, password) => {
     try {
       setLoading(true);
       setErr(null);
       const userDetail = await signUpUser(email, password);
+      await updateUserProfile(userDetail, name);
       setUser(userDetail);
       setErr(null);
       toast.success("Signed up successfully");

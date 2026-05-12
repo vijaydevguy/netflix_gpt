@@ -32,7 +32,8 @@ If you are developing a production application, we recommend using TypeScript wi
 - React toastify (for toaster message)
 - Created Redux Store with userSlice
 - Sign out
-
+- Impleted update profile api (firebase)
+- Fetch movies from tmdb api (public)
 
 Features
 
