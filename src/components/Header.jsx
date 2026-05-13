@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/asset";
 import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
@@ -6,15 +6,46 @@ import { TbLogout2 } from "react-icons/tb";
 import { useAuth } from "../hooks/useAuth";
 import LogoutConfirmModal from "./LogoutModal";
 import { useSelector } from "react-redux";
+import { addUser, removeUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const Header = () => {
   // we able to get stored state using selector in redux
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // const uid = user.uid;
+        const { uid, displayName, photoURL, email, password } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            name: displayName,
+            email: email,
+            password: password,
+            photoUrl: photoURL,
+          }),
+        );
+        navigate("/browse");
+      } else {
+        // User is signed out
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
+
+    // we will unsubscribe this useeffect after done this work
+    return () => unsubscribe();
+  }, []);
 
   const navOptions = [
     // { label: "Profile", value: "profile" },
@@ -53,7 +84,7 @@ const Header = () => {
     console.log("User logged out");
     logout();
     setShowLogoutModal(false);
-    navigate("/");
+    // navigate("/");
   };
 
   const handleChange = (e) => {
@@ -89,7 +120,7 @@ const Header = () => {
 
   return (
     <div
-      className={`absolute px-8 py-6 bg-gradient-to-b from-black to-transparent w-full z-50 flex flex-row justify-between items-center `}
+      className={`absolute px-8 py-6 bg-gradient-to-b from-black to-transparent w-full z-50 flex flex-row justify-between items-center`}
     >
       {/* logout modal */}
       <LogoutConfirmModal

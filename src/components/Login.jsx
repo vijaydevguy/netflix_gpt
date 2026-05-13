@@ -2,14 +2,14 @@ import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { PiEye, PiEyeSlash } from "react-icons/pi";
 import { addUser } from "../utils/userSlice";
 import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 
 const Login = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { signup, signin, err, loading, user, clearError } = useAuth();
   const dispatch = useDispatch();
 
@@ -76,7 +76,7 @@ const Login = () => {
       );
 
       if (signedUpUser) {
-        navigate("/browse");
+        // navigate("/browse");
         clearField();
       }
     } else {
@@ -94,7 +94,7 @@ const Login = () => {
       console.log(signedInUser, "testResSigninUser");
 
       if (signedInUser) {
-        navigate("/browse");
+        // navigate("/browse");
         clearField();
       }
     }

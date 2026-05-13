@@ -34,6 +34,10 @@ If you are developing a production application, we recommend using TypeScript wi
 - Sign out
 - Impleted update profile api (firebase)
 - Fetch movies from tmdb api (public)
+- All Authenticated routing moved inside Auth change
+  (remove all other navigations)
+- user logged in redirect to "/browse" or "/"
+- unsubscribed to the onAuthStateChange callback
 
 Features
 
